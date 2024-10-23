@@ -32,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\shared\src\Datadog.libdatadog.Native\Datadog.libdatadog.Native.vcxproj" />
     <ProjectReference Include="..\Datadog.Trace.SourceGenerators\Datadog.Trace.SourceGenerators.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
   </ItemGroup>
 
