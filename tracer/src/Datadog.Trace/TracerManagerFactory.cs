@@ -14,6 +14,7 @@ using Datadog.Trace.Configuration;
 using Datadog.Trace.ContinuousProfiler;
 using Datadog.Trace.DataStreamsMonitoring;
 using Datadog.Trace.DogStatsd;
+using Datadog.Trace.Libdatadog;
 using Datadog.Trace.Logging;
 using Datadog.Trace.Logging.DirectSubmission;
 using Datadog.Trace.Logging.TracerFlare;
@@ -342,7 +343,7 @@ namespace Datadog.Trace
         protected virtual IAgentWriter GetAgentWriter(ImmutableTracerSettings settings, IDogStatsd statsd, Action<Dictionary<string, float>> updateSampleRates, IDiscoveryService discoveryService)
         {
             var apiRequestFactory = TracesTransportStrategy.Get(settings.ExporterInternal);
-            var api = new Api(apiRequestFactory, statsd, updateSampleRates, settings.ExporterInternal.PartialFlushEnabledInternal);
+            var api = new TraceExporter(settings);
 
             var statsAggregator = StatsAggregator.Create(api, settings, discoveryService);
 

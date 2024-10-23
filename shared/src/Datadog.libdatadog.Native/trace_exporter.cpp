@@ -11,17 +11,21 @@
 TraceExporter::TraceExporter(const std::string url, const std::string tracer_version, const std::string language,
                              const std::string language_version, const std::string language_interpreter,
                              const std::string hostname, const std::string env, const std::string version,
-                             const std::string service, const ddog_TraceExporterInputFormat input_format,
-                             const ddog_TraceExporterOutputFormat output_format, const bool compute_stats,
+                             const std::string service, const TraceExporterInputFormat input_format,
+                             const TraceExporterOutputFormat output_format, const bool compute_stats,
                              void (*agent_response_callback)(const char*))
 {
     ddog_TraceExporter* exporter = nullptr;
+
+    auto ddog_input_format = static_cast<ddog_TraceExporterInputFormat>(input_format);
+    auto ddog_output_format = static_cast<ddog_TraceExporterOutputFormat>(output_format);
+
     auto error = ddog_trace_exporter_new(
         &exporter, CharSliceBuilder::from_string(url), CharSliceBuilder::from_string(tracer_version),
         CharSliceBuilder::from_string(language), CharSliceBuilder::from_string(language_version),
         CharSliceBuilder::from_string(language_interpreter), CharSliceBuilder::from_string(hostname),
         CharSliceBuilder::from_string(env), CharSliceBuilder::from_string(version),
-        CharSliceBuilder::from_string(service), input_format, output_format, compute_stats,
+        CharSliceBuilder::from_string(service), ddog_input_format, ddog_output_format, compute_stats,
         agent_response_callback);
 
     if (error.tag == DDOG_OPTION_ERROR_SOME_ERROR)
@@ -44,5 +48,30 @@ void TraceExporter::Send(std::uint8_t* buffer, std::size_t buffer_size, std::siz
     if (error.tag == DDOG_OPTION_ERROR_SOME_ERROR)
     {   
         assert(false, "Error sending trace");
+    }
+}
+
+extern "C"
+{
+    TRACE_EXPORTER_API void* CreateTraceExporter(const char* url, const char* tracer_version, const char* language,
+                                                 const char* language_version, const char* language_interpreter,
+                                                 const char* hostname, const char* env, const char* version,
+                                                 const char* service, TraceExporterInputFormat input_format,
+                                                 TraceExporterOutputFormat output_format, bool compute_stats,
+                                                 AgentResponseCallback callback)
+    {
+        return new TraceExporter(url, tracer_version, language, language_version, language_interpreter, hostname, env,
+                                 version, service, input_format, output_format, compute_stats, callback);
+    }
+
+    TRACE_EXPORTER_API void DestroyTraceExporter(void* exporter)
+    {
+        delete static_cast<TraceExporter*>(exporter);
+    }
+
+    TRACE_EXPORTER_API void SendTrace(void* exporter, std::uint8_t* buffer, std::size_t buffer_size,
+                                      std::size_t trace_count)
+    {
+        static_cast<TraceExporter*>(exporter)->Send(buffer, buffer_size, trace_count);
     }
 }
