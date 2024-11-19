@@ -145,4 +145,33 @@
     <DefineConstants>$(DefineConstants);ENABLE_IL2CPP</DefineConstants>
   </PropertyGroup>
 
+  <!-- TODO: Replace this with nuget package in the end -->
+  <PropertyGroup Condition="($(RuntimeIdentifier) == '' and $([MSBuild]::IsOSPlatform('Windows'))) or $(RuntimeIdentifier.StartsWith('win'))">
+    <IsWindows>true</IsWindows>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="($(RuntimeIdentifier) == '' and $([MSBuild]::IsOSPlatform('OSX'))) or $(RuntimeIdentifier.StartsWith('osx'))">
+    <IsMacOS>true</IsMacOS>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="($(RuntimeIdentifier) == '' and $([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture) == 'x64') or $(RuntimeIdentifier.EndsWith('x64'))">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="($(RuntimeIdentifier) == '' and $([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture) == 'Arm64') or $(RuntimeIdentifier.EndsWith('arm64'))">
+    <PlatformTarget>ARM64</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(IsMacOS)' == 'true' and '$(PlatformTarget)' == 'ARM64'">
+    <Content Include="..\..\..\..\libdatadog\bin\aarch64-apple-darwin\debug\libdatadog_profiling_ffi.dylib">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(IsWindows)' == 'true' and '$(PlatformTarget)' == 'x64'">
+    <Content Include="..\..\..\..\libdatadog\bin\x86_64-pc-windows-msvc\debug\datadog_profiling_ffi.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
