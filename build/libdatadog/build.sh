@@ -50,18 +50,22 @@ copy_to_bin() {
     echo "Copying to runtimes"
     mkdir -p runtimes/linux-musl-arm64/native
     cp releases/libdatadog-aarch64-alpine-linux-musl/lib/libdatadog_profiling.so runtimes/linux-musl-arm64/native/libdatadog_profiling.so
+    cp releases/libdatadog-aarch64-alpine-linux-musl/lib/libdatadog_profiling.so runtimes/linux-musl-arm64/native/libdatadog_profiling.debug.so
 
     mkdir -p runtimes/osx-arm64/native
     cp releases/libdatadog-aarch64-apple-darwin/lib/libdatadog_profiling.dylib runtimes/osx-arm64/native/libdatadog_profiling.dylib
 
     mkdir -p runtimes/linux-arm64/native
     cp releases/libdatadog-aarch64-unknown-linux-gnu/lib/libdatadog_profiling.so runtimes/linux-arm64/native/libdatadog_profiling.so
+    cp releases/libdatadog-aarch64-unknown-linux-gnu/lib/libdatadog_profiling.so runtimes/linux-arm64/native/libdatadog_profiling.debug.so
 
     mkdir -p runtimes/linux-musl-x64/native
     cp releases/libdatadog-x86_64-alpine-linux-musl/lib/libdatadog_profiling.so runtimes/linux-musl-x64/native/libdatadog_profiling.so
+    cp releases/libdatadog-x86_64-alpine-linux-musl/lib/libdatadog_profiling.so runtimes/linux-musl-x64/native/libdatadog_profiling.debug.so
 
     mkdir -p runtimes/linux-x64/native
     cp releases/libdatadog-x86_64-unknown-linux-gnu/lib/libdatadog_profiling.so runtimes/linux-x64/native/libdatadog_profiling.so
+    cp releases/libdatadog-x86_64-unknown-linux-gnu/lib/libdatadog_profiling.so runtimes/linux-x64/native/libdatadog_profiling.debug.so
 }
 
 copy_headers() {
