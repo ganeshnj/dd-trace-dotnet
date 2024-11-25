@@ -1,37 +1,36 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd">
-    <metadata minClientVersion="3.5">
-        <id>libdatadog</id>
-        <owners>Datadog</owners>
-        <authors>Datadog</authors>
-        <title>Datadog libdatadog</title>
-        <version>1.0.0</version>
-        <projectUrl>https://github.com/DataDog/libdatadog</projectUrl>
-        <description>libdatadog provides a shared library containing common code used in the implementation of Datadog's libraries, including Datadog Continuous Profilers</description>
-        <releaseNotes>Release of libdatadog</releaseNotes>
-        <dependencies>
-            <group targetFramework=".NETCoreApp,Version=v2.1">
-            </group>
-        </dependencies>
-    </metadata>
+  <metadata minClientVersion="3.5">
+    <id>libdatadog</id>
+    <owners>Datadog</owners>
+    <authors>Datadog</authors>
+    <title>Datadog libdatadog</title>
+    <version>1.0.0</version>
+    <projectUrl>https://github.com/DataDog/libdatadog</projectUrl>
+    <description>libdatadog provides a shared library containing common code used in the implementation of Datadog's libraries, including Datadog Continuous Profilers</description>
+    <releaseNotes>Release of libdatadog</releaseNotes>
+    <dependencies>
+      <group targetFramework="netstandard2.0"/>
+    </dependencies>
+  </metadata>
 
-    <files>
-        <!-- build assets -->
-        <file src=".\build\native\libdatadog.targets" target="build\native" />
-        <file src=".\build\libdatadog.targets" target="build" />
+  <files>
+    <!-- build assets -->
+    <file src=".\build\native\libdatadog.targets" target="build\native" />
+    <file src=".\build\libdatadog.targets" target="build" />
 
-        <!-- native headers -->
-        <file src=".\include\*" target="include" />
+    <!-- native headers -->
+    <file src=".\include\*" target="include" />
 
-        <!-- runtime shared libraries and pdbs -->
-        <file src=".\runtimes\linux-arm64\native\*.so" target="runtimes\linux-arm64\native" />
-        <file src=".\runtimes\linux-musl-arm64\native\*.so" target="runtimes\linux-musl-arm64\native" />
-        <file src=".\runtimes\linux-musl-x64\native\*.so" target="runtimes\linux-musl-x64\native" />
-        <file src=".\runtimes\linux-x64\native\*.so" target="runtimes\linux-x64\native" />
-        <file src=".\runtimes\osx-arm64\native\*.dylib" target="runtimes\osx-arm64\native" />
-        <file src=".\runtimes\win-x86\native\*.dll" target="runtimes\win-x86\native" />
-        <file src=".\runtimes\win-x86\native\*.pdb" target="runtimes\win-x86\native" />
-        <file src=".\runtimes\win-x64\native\*.dll" target="runtimes\win-x64\native" />
-        <file src=".\runtimes\win-x64\native\*.pdb" target="runtimes\win-x64\native" />
-    </files>
+    <!-- runtime shared libraries and pdbs -->
+    <file src=".\runtimes\linux-arm64\native\*.so" target="runtimes\linux-arm64\native" />
+    <file src=".\runtimes\linux-musl-arm64\native\*.so" target="runtimes\linux-musl-arm64\native" />
+    <file src=".\runtimes\linux-musl-x64\native\*.so" target="runtimes\linux-musl-x64\native" />
+    <file src=".\runtimes\linux-x64\native\*.so" target="runtimes\linux-x64\native" />
+    <file src=".\runtimes\osx-arm64\native\*.dylib" target="runtimes\osx-arm64\native" />
+    <file src=".\runtimes\win-x86\native\*.dll" target="runtimes\win-x86\native" />
+    <file src=".\runtimes\win-x86\native\*.pdb" target="runtimes\win-x86\native" />
+    <file src=".\runtimes\win-x64\native\*.dll" target="runtimes\win-x64\native" />
+    <file src=".\runtimes\win-x64\native\*.pdb" target="runtimes\win-x64\native" />
+  </files>
 </package>
