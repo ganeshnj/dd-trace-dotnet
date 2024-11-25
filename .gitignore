@@ -388,3 +388,5 @@ datadog-coverage-*
 
 # nuke
 .nuke/build.schema.json
+build/libdatadog/runtimes
+build/libdatadog/include

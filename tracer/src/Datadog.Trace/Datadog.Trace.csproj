@@ -55,6 +55,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="InlineIL.Fody" Version="1.8.0" PrivateAssets="All" />
+    <PackageReference Include="libdatadog" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
@@ -145,33 +146,8 @@
     <DefineConstants>$(DefineConstants);ENABLE_IL2CPP</DefineConstants>
   </PropertyGroup>
 
-  <!-- TODO: Replace this with nuget package in the end -->
-  <PropertyGroup Condition="($(RuntimeIdentifier) == '' and $([MSBuild]::IsOSPlatform('Windows'))) or $(RuntimeIdentifier.StartsWith('win'))">
-    <IsWindows>true</IsWindows>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="($(RuntimeIdentifier) == '' and $([MSBuild]::IsOSPlatform('OSX'))) or $(RuntimeIdentifier.StartsWith('osx'))">
-    <IsMacOS>true</IsMacOS>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="($(RuntimeIdentifier) == '' and $([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture) == 'x64') or $(RuntimeIdentifier.EndsWith('x64'))">
-    <PlatformTarget>x64</PlatformTarget>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="($(RuntimeIdentifier) == '' and $([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture) == 'Arm64') or $(RuntimeIdentifier.EndsWith('arm64'))">
-    <PlatformTarget>ARM64</PlatformTarget>
-  </PropertyGroup>
-
-  <ItemGroup Condition="'$(IsMacOS)' == 'true' and '$(PlatformTarget)' == 'ARM64'">
-    <Content Include="..\..\..\..\libdatadog\bin\aarch64-apple-darwin\debug\libdatadog_profiling_ffi.dylib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(IsWindows)' == 'true' and '$(PlatformTarget)' == 'x64'">
-    <Content Include="..\..\..\..\libdatadog\bin\x86_64-pc-windows-msvc\debug\datadog_profiling_ffi.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
+  <!-- build nuget package if dd-dotnet-trace/packages/libdatadog.1.0.0.nupkg doesnt' exist -->
+  <Target Name="BuildLibdatadog" BeforeTargets="Restore" Condition="!Exists('$(MSBuildThisFileDirectory)..\..\..\packages\libdatadog.1.0.0.nupkg')">
+    <Exec Command=".\..\..\..\build\libdatadog\build.sh --clean --version 14.2.0 --output $(MSBuildThisFileDirectory)..\..\..\packages" />
+  </Target>
 </Project>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0"
+    xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup Condition="($(RuntimeIdentifier) == '' and $([MSBuild]::IsOSPlatform('Linux'))) or $(RuntimeIdentifier.StartsWith('linux'))">
+        <IsLinux>true</IsLinux>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="($(RuntimeIdentifier) == '' and $([MSBuild]::IsOSPlatform('OSX'))) or $(RuntimeIdentifier.StartsWith('osx'))">
+        <IsMacOS>true</IsMacOS>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="($(RuntimeIdentifier) == '' and $([MSBuild]::IsOSPlatform('Windows'))) or $(RuntimeIdentifier.StartsWith('win'))">
+        <IsWindows>true</IsWindows>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="($(RuntimeIdentifier) == '' and $([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture) == 'x64') or $(RuntimeIdentifier.EndsWith('x64'))">
+        <PlatformTarget>x64</PlatformTarget>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="($(RuntimeIdentifier) == '' and $([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture) == 'Arm64') or $(RuntimeIdentifier.EndsWith('arm64'))">
+        <IsArm64>true</IsArm64>
+        <PlatformTarget>ARM64</PlatformTarget>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="($(RuntimeIdentifier) == '' and $([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture) == 'Arm') or $(RuntimeIdentifier.EndsWith('arm'))">
+        <IsArm>true</IsArm>
+        <PlatformTarget>ARM</PlatformTarget>
+    </PropertyGroup>
+
+    <Target Name="libdatadog-linux-x64" BeforeTargets="PostBuildEvent;PrepareForRun" Condition="'$(PlatformTarget)' == 'x64' AND '$(IsLinux)' == 'true'">
+        <ItemGroup>
+            <BinFiles Include="$(MSBuildThisFileDirectory)..\..\runtimes\linux-x64\native\libdatadog.so" />
+            <BinFiles Include="$(MSBuildThisFileDirectory)..\..\runtimes\linux-x64\native\libdatadog.debug.so" />
+        </ItemGroup>
+        <Copy SourceFiles="@(BinFiles)" DestinationFolder="$(OutDir)" />
+    </Target>
+
+    <Target Name="libdatadog-linux-arm64" BeforeTargets="PostBuildEvent;PrepareForRun" Condition="'$(PlatformTarget)' == 'ARM64' AND '$(IsLinux)' == 'true'">
+        <ItemGroup>
+            <BinFiles Include="$(MSBuildThisFileDirectory)..\..\runtimes\linux-arm64\native\libdatadog.so" />
+            <BinFiles Include="$(MSBuildThisFileDirectory)..\..\runtimes\linux-arm64\native\libdatadog.debug.so" />
+        </ItemGroup>
+        <Copy SourceFiles="@(BinFiles)" DestinationFolder="$(OutDir)" />
+    </Target>
+
+    <Target Name="libdatadog-linux-musl-x64" BeforeTargets="PostBuildEvent;PrepareForRun" Condition="'$(PlatformTarget)' == 'x64' AND '$(IsLinux)' == 'true'">
+        <ItemGroup>
+            <BinFiles Include="$(MSBuildThisFileDirectory)..\..\runtimes\linux-musl-x64\native\libdatadog.so" />
+            <BinFiles Include="$(MSBuildThisFileDirectory)..\..\runtimes\linux-musl-x64\native\libdatadog.debug.so" />
+        </ItemGroup>
+        <Copy SourceFiles="@(BinFiles)" DestinationFolder="$(OutDir)" />
+    </Target>
+
+    <Target Name="libdatadog-linux-musl-arm64" BeforeTargets="PostBuildEvent;PrepareForRun" Condition="'$(PlatformTarget)' == 'ARM64' AND '$(IsLinux)' == 'true'">
+        <ItemGroup>
+            <BinFiles Include="$(MSBuildThisFileDirectory)..\..\runtimes\linux-musl-arm64\native\libdatadog.so" />
+            <BinFiles Include="$(MSBuildThisFileDirectory)..\..\runtimes\linux-musl-arm64\native\libdatadog.debug.so" />
+        </ItemGroup>
+        <Copy SourceFiles="@(BinFiles)" DestinationFolder="$(OutDir)" />
+    </Target>
+
+    <Target Name="libdatadog-osx-arm64" BeforeTargets="PostBuildEvent;PrepareForRun" Condition="'$(PlatformTarget)' == 'ARM64' AND '$(IsMacOS)' == 'true'">
+        <ItemGroup>
+            <BinFiles Include="$(MSBuildThisFileDirectory)..\..\runtimes\osx-arm64\native\libdatadog.dylib" />
+        </ItemGroup>
+        <Copy SourceFiles="@(BinFiles)" DestinationFolder="$(OutDir)" />
+    </Target>
+
+    <Target Name="libdatadog-win-x64" BeforeTargets="PostBuildEvent;PrepareForRun" Condition="'$(PlatformTarget)' == 'x64' AND '$(IsWindows)' == 'true'">
+        <ItemGroup>
+            <BinFiles Include="$(MSBuildThisFileDirectory)..\..\runtimes\win-x64\native\libdatadog.dll" />
+            <BinFiles Include="$(MSBuildThisFileDirectory)..\..\runtimes\win-x64\native\libdatadog.pdb" />
+        </ItemGroup>
+        <Copy SourceFiles="@(BinFiles)" DestinationFolder="$(OutDir)" />
+    </Target>
+
+    <Target Name="libdatadog-win-x86" BeforeTargets="PostBuildEvent;PrepareForRun" Condition="'$(PlatformTarget)' == 'x86' AND '$(IsWindows)' == 'true'">
+        <ItemGroup>
+            <BinFiles Include="$(MSBuildThisFileDirectory)..\..\runtimes\win-x86\native\libdatadog.dll" />
+            <BinFiles Include="$(MSBuildThisFileDirectory)..\..\runtimes\win-x86\native\libdatadog.pdb" />
+        </ItemGroup>
+        <Copy SourceFiles="@(BinFiles)" DestinationFolder="$(OutDir)" />
+    </Target>
+
+    <Target Name="libdatadog-clean" BeforeTargets="Clean">
+        <ItemGroup>
+            <BinFiles Include="$(OutDir)\libdatadog.*" />
+        </ItemGroup>
+        <Delete Files="@(BinFiles)" />
+    </Target>
+
+</Project>

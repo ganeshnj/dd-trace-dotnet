@@ -97,7 +97,7 @@ internal class TraceExporter : IApi, IDisposable
 #pragma warning disable SA1300
     internal class Native
     {
-        private const string DllName = "datadog_profiling_ffi";
+        private const string DllName = "libdatadog_profiling";
 
         [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
         internal static extern MaybeError ddog_trace_exporter_new(
